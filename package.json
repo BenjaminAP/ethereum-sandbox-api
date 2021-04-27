@@ -1,0 +1,24 @@
+{
+  "name": "ethereum-sandbox-api",
+  "version": "1.0.0",
+  "main": "src/index.ts",
+  "scripts": {
+    "bild": "tsc",
+    "dev": "nodemon --config nodemon.json src/index.ts",
+    "start": "ts-node src/index.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@koa/cors": "^3.1.0",
+    "@types/koa": "^2.13.1",
+    "@types/koa-bodyparser": "^4.3.0",
+    "@types/koa-router": "^7.4.2",
+    "koa-body": "^4.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^15.0.1",
+    "nodemon": "^2.0.7",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.2.4"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "verbose": true,
+  "ignore": ["./**/*.spec.ts"],
+  "watch": ["./**/*.ts"],
+  "execMap": {
+    "ts": "ts-node --project tsconfig.json"
+  }
+}
