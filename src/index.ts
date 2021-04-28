@@ -4,6 +4,7 @@ import Morgan from 'morgan';
 import BodyParser from 'body-parser';
 import Router from "koa-router";
 import cors from "@koa/cors";
+import {EthereumUtil} from "./classes/EthereumUtil";
 
 
 class ServerApp {
@@ -11,6 +12,7 @@ class ServerApp {
     private app: Koa;
     private router: Router;
     readonly route_port = 3000;
+    private ethereumUtils: EthereumUtil;
 
     constructor() {
         this.app = new Koa();
@@ -23,6 +25,8 @@ class ServerApp {
             ctx.body = 'Hello World through Koa!';
             ctx.status = 200;
         });
+
+        this.ethereumUtils = new EthereumUtil();
 
         this.KoaInit();
     }
