@@ -25,7 +25,7 @@ export class EthereumUtil {
         this.web3 = new Web3(this.ganache_url);
     }
 
-    public getAddrDetails(addr: string): Promise<AccountDetailsI> {
+    public getAddrDetails(addr: string): Promise<AccountDetailsI>{
         try {
             return this.web3.eth.getBalance(addr)
                 .then((addressBal: string) => addressBal)
