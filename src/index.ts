@@ -6,6 +6,8 @@ import Router from "koa-router";
 import cors from "@koa/cors";
 import {EthereumUtil} from "./classes/EthereumUtil";
 import {EthereumRouter} from "./routes/ethereum_router";
+import morgan from "morgan";
+import bodyParser from "body-parser";
 
 
 class ServerApp {
@@ -27,6 +29,9 @@ class ServerApp {
             ctx.status = 200;
         });
 
+        this.app
+            .use(this.router.routes())
+            .use(this.router.allowedMethods());
 
         this.initRouteControllers();
         this.KoaInit();
@@ -35,9 +40,11 @@ class ServerApp {
 
     private KoaInit(): void {
 
-        this.app
-            .use(this.router.routes())
-            .use(this.router.allowedMethods());
+        this.app.use(async () => {
+            morgan("dev");
+            bodyParser.urlencoded({extended:true});
+            bodyParser.json()
+        });
 
         this.app.use(async () => {
             Morgan("dev");

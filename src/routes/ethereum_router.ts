@@ -14,7 +14,7 @@ export class EthereumRouter {
         this.router = app_router;
         this.ganachePort = 7545;
 
-        this.router.get('/Ethereum Router', (ctx, next) => {
+        this.router.get('/ethereumRouter', (ctx, next) => {
             // ctx.router available
             ctx.body = 'Hello Ethereum Router!';
         });
@@ -27,7 +27,9 @@ export class EthereumRouter {
         this.connectGanache();
         this.getAddrDetails();
 
-        this.server.use(this.router.routes()).use(this.router.allowedMethods());
+        this.server
+            .use(this.router.routes())
+            .use(this.router.allowedMethods());
     }
 
     private connectGanache(): void {
@@ -41,32 +43,34 @@ export class EthereumRouter {
 
                     this.ethereum_util = new EthereumUtil(this.ganachePort);
 
+                    ctx.body = `Connected to Ganache in port:${this.ganachePort}`;
+
                 } else {
-                    ctx.throw(500, '[Connect to Ganache] No body found in Request')
+                    ctx.throw(500, '[ERROR] In request body.')
                 }
+
+                ctx.status = 200;
             } catch (e) {
-                ctx.throw(500, 'Error connecting to Ganache');
+                ctx.throw(500, '[ERROR] connecting to Ganache');
             }
         });
     }
 
     private getAddrDetails(): void {
 
-        this.router.post('addressDetails/', async (ctx, next) => {
+        this.router.post('/addressDetails', async (ctx, next) => {
 
             try {
 
                 if (ctx.request.body) {
-                    const addr: string = ctx.request.body;
+                    const addr: string = ctx.request.body.addr;
 
                     if (this.ethereum_util) {
-                        ctx.body =  await this.ethereum_util.getAddrDetails(addr)
-                            .then(console.log);
+                        ctx.body = await this.ethereum_util.getAddrDetails(addr);
                     } else {
                         this.ethereum_util = new EthereumUtil(this.ganachePort);
 
-                        ctx.body = await this.ethereum_util.getAddrDetails(addr)
-                            .then(console.log);
+                        ctx.body = await this.ethereum_util.getAddrDetails(addr);
                     }
 
                 } else {
