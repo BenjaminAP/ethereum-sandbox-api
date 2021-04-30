@@ -5,6 +5,7 @@ import BodyParser from 'body-parser';
 import Router from "koa-router";
 import cors from "@koa/cors";
 import {EthereumUtil} from "./classes/EthereumUtil";
+import {EthereumRouter} from "./routes/ethereum_router";
 
 
 class ServerApp {
@@ -12,7 +13,7 @@ class ServerApp {
     private app: Koa;
     private router: Router;
     readonly route_port = 3000;
-    private ethereumUtils: EthereumUtil;
+    private ethereumUtils?: EthereumUtil;
 
     constructor() {
         this.app = new Koa();
@@ -26,8 +27,8 @@ class ServerApp {
             ctx.status = 200;
         });
 
-        this.ethereumUtils = new EthereumUtil();
 
+        this.initRouteControllers();
         this.KoaInit();
     }
 
@@ -45,6 +46,10 @@ class ServerApp {
         });
 
         this.app.listen(this.route_port, () => {console.log(`http://localhost:${this.route_port}`)});
+    }
+
+    private initRouteControllers(): void {
+        new EthereumRouter(this.app, this.router);
     }
 }
 
