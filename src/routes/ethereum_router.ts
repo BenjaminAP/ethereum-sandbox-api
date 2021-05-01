@@ -37,19 +37,19 @@ export class EthereumRouter {
         this.router.post('/connectToGanache', async (ctx, next) => {
 
             try {
-                if (ctx.request.body) {
+                if (ctx.request.body.port) {
 
                     this.ganachePort = ctx.request.body.port;
 
                     this.ethereum_util = new EthereumUtil(this.ganachePort);
 
                     ctx.body = `Connected to Ganache in port:${this.ganachePort}`;
+                    ctx.status = 200;
 
                 } else {
-                    ctx.throw(500, '[ERROR] In request body.')
+                    ctx.throw(400, '[ERROR] In request body of /connectToGanache');
                 }
 
-                ctx.status = 200;
             } catch (e) {
                 ctx.throw(500, '[ERROR] connecting to Ganache');
             }
@@ -62,7 +62,7 @@ export class EthereumRouter {
 
             try {
 
-                if (ctx.request.body) {
+                if (ctx.request.body.addr) {
                     const addr: string = ctx.request.body.addr;
 
                     if (this.ethereum_util) {
@@ -73,11 +73,11 @@ export class EthereumRouter {
                         ctx.body = await this.ethereum_util.getAddrDetails(addr);
                     }
 
-                } else {
-                    ctx.throw(500, `[ERROR] In request body`);
-                }
+                    ctx.status = 200;
 
-                ctx.status = 200;
+                } else {
+                    ctx.throw(400, `[ERROR] In request body of /addressDetails`);
+                }
 
             } catch (e) {
                 ctx.throw(500, `${e}`)
