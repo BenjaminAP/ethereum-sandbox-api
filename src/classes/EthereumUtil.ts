@@ -2,6 +2,8 @@ import os from 'os';
 import Web3 from "web3";
 import {TransactionI} from "../models/transactionI";
 import {AccountDetailsI} from "../models/AccountDetailsI";
+import {Transaction} from "ethereumjs-tx";
+import {PromiEvent, TransactionReceipt} from "web3-core";
 
 /*/
 TODO
@@ -39,6 +41,31 @@ export class EthereumUtil {
                 });
         }catch (e) {
             return e;
+        }
+    }
+
+    public async getTxCountOfAddr(addr: string): Promise<number> {
+
+        try {
+            return await this.web3.eth.getTransactionCount(addr);
+        } catch (e) {
+            console.log(`Error Getting Transactions count from address: ${addr}`, e);
+            return e;
+        }
+    }
+
+    public signTransaction(): void {
+
+    }
+
+    public async sendSignTransaction(transaction: Transaction): Promise<TransactionReceipt> {
+        const serializedTransaction = transaction.serialize();
+
+        try {
+            return await this.web3.eth.sendSignedTransaction(serializedTransaction.toString('hex'));
+        } catch (err) {
+            console.log("Error Sending Transaction", err);
+            return err;
         }
     }
 
